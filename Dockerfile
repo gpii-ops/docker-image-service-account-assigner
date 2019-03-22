@@ -21,13 +21,29 @@ RUN apk add --update --no-cache \
     && make -e build \
     && mv /go/src/${SAA_PROJECT}/build/bin/${ARCH}/k8s-gke-service-account-assigner /service-account-assigner
 
-FROM scratch
+FROM alpine:3.9
 
 ENV SAA_UID=10000 \
-    SAA_GID=10000
+    SAA_GID=10000 \
+    SAA_USER=saa \
+    SAA_GROUP=saa \
+    SAA_HOME=/opt/saa
 
-COPY --from=build /service-account-assigner /service-account-assigner
+RUN apk add --update --no-cache \
+      iptables \
+      libcap \
+    && mkdir -p "${SAA_HOME}" \
+    && addgroup -g "${SAA_GID}" "${SAA_GROUP}" \
+    && adduser -g "Service Account Assigner user" -D -h "${SAA_HOME}" -G "${SAA_GROUP}" -s /sbin/nologin -u "${SAA_UID}" "${SAA_USER}" \
+    # /run is needed for /run/xtables.lock
+    && chown -R "${SAA_USER}:${SAA_GROUP}" "${SAA_HOME}" /run \
+    # SAA needs to run iptables
+    && setcap CAP_NET_RAW,CAP_NET_ADMIN=+ep /sbin/xtables-multi \
+    && apk del \
+      libcap
 
-USER ${SAA_UID}:${SAA_GID}
+COPY --from=build /service-account-assigner "/${SAA_HOME}/service-account-assigner"
 
-ENTRYPOINT ["/service-account-assigner"]
+USER ${SAA_USER}:${SAA_GROUP}
+
+ENTRYPOINT ["/opt/saa/service-account-assigner"]
