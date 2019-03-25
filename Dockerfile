@@ -1,13 +1,14 @@
 FROM golang:1.12.1-alpine3.9 AS build
 
-ENV SAA_RELEASE=master \
+ENV SAA_RELEASE=add-proxy-support \
     SAA_PROJECT=github.com/imduffy15/k8s-gke-service-account-assigner \
-    SAA_GIT_SHA=af04ba0acae0a90faa600390c6de93f521872cf4 \
+    SAA_FORK=github.com/stepanstipl/k8s-gke-service-account-assigner \
+    SAA_GIT_SHA=ef1e2f2c40a9b81e08ad246e32592d1a90ce491c \
     CGO_ENABLED=0 \
     LANG=C.UTF-8 \
     ARCH=linux
 
-ENV SAA_GIT_REPO=https://${SAA_PROJECT}.git \
+ENV SAA_GIT_REPO=https://${SAA_FORK}.git \
     REPO_VERSION=${SAA_RELEASE}
 
 RUN apk add --update --no-cache \
@@ -30,6 +31,7 @@ ENV SAA_UID=10000 \
     SAA_HOME=/opt/saa
 
 RUN apk add --update --no-cache \
+      ca-certificates \
       iptables \
       libcap \
     && mkdir -p "${SAA_HOME}" \
