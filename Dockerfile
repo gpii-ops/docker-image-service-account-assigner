@@ -1,14 +1,13 @@
 FROM golang:1.12.1-alpine3.9 AS build
 
-ENV SAA_RELEASE=add-proxy-support \
+ENV SAA_RELEASE=v0.0.2 \
     SAA_PROJECT=github.com/imduffy15/k8s-gke-service-account-assigner \
-    SAA_FORK=github.com/stepanstipl/k8s-gke-service-account-assigner \
-    SAA_GIT_SHA=ef1e2f2c40a9b81e08ad246e32592d1a90ce491c \
+    SAA_GIT_SHA=551204bc4de049eaaa4e6139684447103a97c8a2 \
     CGO_ENABLED=0 \
     LANG=C.UTF-8 \
     ARCH=linux
 
-ENV SAA_GIT_REPO=https://${SAA_FORK}.git \
+ENV SAA_GIT_REPO=https://${SAA_PROJECT}.git \
     REPO_VERSION=${SAA_RELEASE}
 
 RUN apk add --update --no-cache \
