@@ -1,8 +1,8 @@
 FROM golang:1.12.1-alpine3.9 AS build
 
 ENV SAA_RELEASE=v0.0.2 \
-    SAA_PROJECT=github.com/imduffy15/k8s-gke-service-account-assigner \
-    SAA_GIT_SHA=551204bc4de049eaaa4e6139684447103a97c8a2 \
+    SAA_PROJECT=github.com/gpii-ops/k8s-gke-service-account-assigner \
+    SAA_GIT_SHA=db948368ed86de33a3049d88f88bfa9285b408b3 \
     CGO_ENABLED=0 \
     LANG=C.UTF-8 \
     ARCH=linux
