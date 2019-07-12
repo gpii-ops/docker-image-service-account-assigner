@@ -1,13 +1,14 @@
 FROM golang:1.12.1-alpine3.9 AS build
 
-ENV SAA_RELEASE=v0.0.2 \
+ENV SAA_RELEASE=v0.0.3 \
     SAA_PROJECT=github.com/imduffy15/k8s-gke-service-account-assigner \
-    SAA_GIT_SHA=551204bc4de049eaaa4e6139684447103a97c8a2 \
+    SAA_FORK=github.com/gpii-ops/k8s-gke-service-account-assigner \
+    SAA_GIT_SHA=db948368ed86de33a3049d88f88bfa9285b408b3 \
     CGO_ENABLED=0 \
     LANG=C.UTF-8 \
     ARCH=linux
 
-ENV SAA_GIT_REPO=https://${SAA_PROJECT}.git \
+ENV SAA_GIT_REPO=https://${SAA_FORK}.git \
     REPO_VERSION=${SAA_RELEASE}
 
 RUN apk add --update --no-cache \
